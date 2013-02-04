@@ -41,7 +41,7 @@ body, html {
 	<script type="text/javascript">
 
 $(function() {
-	$("#bouble").bubble();
+	init_bubble("#bouble");
 });
 
 	</script>
