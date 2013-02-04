@@ -1,0 +1,56 @@
+<!doctype html>
+<head>
+
+	<meta charset="utf-8">
+	
+	<style type="text/css">
+
+body, html {
+	margin: 0;
+	padding: 0;
+}
+#bouble {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	background: #f3f9fb; /* Old browsers */
+	background: -moz-linear-gradient(top, #f3f9fb 0%, #a4c2db 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f3f9fb), color-stop(100%,#a4c2db)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #f3f9fb 0%,#a4c2db 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #f3f9fb 0%,#a4c2db 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #f3f9fb 0%,#a4c2db 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #f3f9fb 0%,#a4c2db 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3f9fb', endColorstr='#a4c2db',GradientType=0 ); /* IE6-9 */
+}
+#bouble_info {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	font-size: 20px;
+	color: red;
+}
+#bouble {
+	width: 1000px;
+	height: 600px;
+}
+
+	</style>
+	
+	<script src="http://code.jquery.com/jquery-1.9.0.min.js"></script>
+	<script src="bubble.js"></script>
+	<script type="text/javascript">
+
+$(function() {
+	init_bubble("#bouble");
+});
+
+	</script>
+
+</head>
+<body>
+	
+	<div id="bouble">&nbsp;</div>
+	<div id="bouble_info">Sprites: <span>0</span></div>
+
+</body>
+</html>

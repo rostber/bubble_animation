@@ -1,0 +1,118 @@
+var G_vmlCanvasManager;
+var ctx = false;
+var bubble_img_a = [];
+
+var bubble_sprite_max_width = 55;
+var bubble_sprite_max_height = 27;
+var bubble_sprite_max_divider = bubble_sprite_max_width/bubble_sprite_max_height;
+var bubble_spring = [];
+var bubble_wind_width = 0;
+var bubble_wind_height = 0;
+var bubble_sprite_speed = 7;
+var bubble_timer = 20;
+var bubble_src_a = ['images/1.png', 'images/2.png', 'images/3.png', 'images/4.png', 'images/5.png', 'images/6.png', 'images/7.png', 'images/8.png', 'images/9.png', 'images/10.png', 'images/11.png', 'images/12.png', 'images/13.png', 'images/14.png', 'images/15.png', 'images/16.png', 'images/17.png', 'images/18.png', 'images/19.png', 'images/20.png', 'images/21.png', 'images/22.png', 'images/23.png', 'images/24.png', 'images/25.png', 'images/26.png', 'images/27.png', 'images/28.png', 'images/29.png', 'images/30.png', 'images/31.png', 'images/32.png', 'images/33.png', 'images/34.png', 'images/35.png', 'images/36.png', 'images/37.png', 'images/38.png', 'images/39.png', 'images/40.png', 'images/41.png'];
+
+function init_bubble(obj)
+{
+	$(obj).html('<canvas>&nbsp;</canvas>');
+	
+	$(obj).find("canvas").each(function() {
+	
+		var canvas = this;	
+
+		bubble_wind_width = $(obj).width();
+		bubble_wind_height = $(obj).height();
+		$(canvas).attr("width", bubble_wind_width).css("width", bubble_wind_width);
+		$(canvas).attr("height", bubble_wind_height).css("height", bubble_wind_height);
+		
+		$(window).resize(function() {
+			bubble_wind_width = $(window).width();
+			bubble_wind_height = $(window).height();
+			$("#bubble").attr("width", bubble_wind_width).css("width", bubble_wind_width);
+			$("#bubble").attr("height", $(window).height()).css("height", $(window).height());
+		});
+		
+		// Check ie
+		if (G_vmlCanvasManager != undefined)
+			G_vmlCanvasManager.initElement(canvas);
+		
+		// Check support
+		if (canvas.getContext) 
+		{
+			ctx = canvas.getContext('2d');
+			
+			// load images
+			for (var k in bubble_src_a)
+			{
+				var img = new Image();
+				img.onload = function()
+				{
+					bubble_img_a.push(this);
+					if (bubble_img_a.length == bubble_src_a.length) bubble_init_spring();
+				}
+				img.src = bubble_src_a[k];
+			}
+		}
+		
+	});
+}
+function bubble_init_spring()
+{
+	// create spring position
+	for (i = 0; i <= 25; i++) bubble_spring[i] = [Math.random(), rand(4, bubble_sprite_max_width), []]; // [left position, size image, sprites array]
+	bubble_animation();
+}
+function bubble_animation()
+{
+	// 	Geburt sprite
+	for (var k in bubble_spring) 
+	{
+		if (Math.random() < 0.03) 
+		{
+			var sprite = {};
+			sprite.t = bubble_wind_height;
+			sprite.l = (bubble_wind_width * bubble_spring[k][0]) + rand( -10, 10 );
+			sprite.w = bubble_spring[k][1];
+			sprite.i = rand( 0, bubble_img_a.langth - 1 );
+			ctx.drawImage(bubble_img_a[sprite.i], sprite.l, sprite.t, sprite.w, sprite.w/bubble_sprite_max_divider);
+			bubble_spring[k][2].push( sprite );
+		}
+	}
+	ctx.clearRect(0, 0, bubble_wind_width, bubble_wind_height + bubble_sprite_max_height);
+	var num = 0;
+	for (var k in bubble_spring) 
+	{
+		for (var k2 in bubble_spring[k][2])
+		{
+			var sprite = bubble_spring[k][2][k2];
+			
+			// Kill sprite
+			if (sprite.t < -bubble_sprite_max_height) bubble_spring[k][2].splice(k2, 1);
+			
+			// Animate sprite
+			sprite.i = sprite.i + 0.4;
+			var src_k = Math.round(sprite.i);
+			if (!bubble_img_a[src_k]) 
+			{
+				sprite.i = 0;
+				src_k = 0;
+			}
+			sprite.t = sprite.t - (bubble_sprite_speed * (sprite.w / bubble_sprite_max_width));
+
+			ctx.drawImage(bubble_img_a[src_k], sprite.l, sprite.t, sprite.w, sprite.w/bubble_sprite_max_divider);
+			num++;
+		}
+	}
+	$("#bouble_info span").html(num);
+	setTimeout("bubble_animation()", bubble_timer)
+}
+
+
+function rand( min, max ) 
+{
+	if( max ) {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	} else {
+		return Math.floor(Math.random() * (min + 1));
+	}
+}
